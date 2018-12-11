@@ -2,6 +2,8 @@ package comb.example.administrator.coolweather.util;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,6 +13,7 @@ import java.util.jar.JarException;
 import comb.example.administrator.coolweather.db.City;
 import comb.example.administrator.coolweather.db.County;
 import comb.example.administrator.coolweather.db.Province;
+import comb.example.administrator.coolweather.gson.Weather;
 
 /**
  * Created by Administrator on 2018/12/4 0004.
@@ -28,12 +31,12 @@ public class Utility {
                     JSONObject provinceObject = allProvinces.getJSONObject(i);
                     Province province = new Province();
                     province.setProvinceName(provinceObject.getString("name"));
-//                    province.setProvinceCode(provinceObject.getInt("id"));
-                    province.save();
+                    province.setProvinceCode(provinceObject.getInt("id"));
+                    province.save();  //储存数据
                 }
                 return true;
             }catch (JSONException e){
-                e.printStackTrace();
+                e.printStackTrace();  //解析
             }
         }
         return false;
@@ -79,6 +82,19 @@ public class Utility {
             }
         }
         return false;
+    }
+
+    //将返回的JSON数据解析成Weather 实体类
+    public static Weather handleWeatherResponse(String response){
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+            String weatherContent = jsonArray.getJSONObject(0).toString();
+            return  new Gson().fromJson(weatherContent,Weather.class);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
