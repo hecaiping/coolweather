@@ -119,8 +119,6 @@ public class WeatherActivity extends AppCompatActivity{
                 drawerLayout.openDrawer(GravityCompat.START);  //openDrawer此方法打开滑动菜单
             }
         });
-
-
     }
 
     //根据天气id 请求城市天气信息
